@@ -12,11 +12,11 @@ font-size: 15px;
 font-weight: bold;
 color: white;
 
-background: linear-gradient(135deg, rgb(11, 11, 132), rgb(73, 5, 73), rgb(118, 5, 5), rgb(73, 5, 73), rgb(11, 11, 132));
-background-size: 400% 400%;
+background: linear-gradient(135deg, rgb(90, 11, 132), rgb(73, 5, 73),  rgb(85, 186, 181), rgb(73, 5, 73), rgb(90, 11, 132));
+background-size: 350% 350%;
 
-animation: gradient 15s ease infinite;
-height: 100vh;
+animation: gradient 5s ease infinite;
+height: 750vh;
 }
 
 @keyframes gradient {
@@ -83,9 +83,9 @@ Modulator <input
     Filter Speed <input
       type="range"
       min="0"
-      max="25"
+      max="15"
       step="0.01"
-      value="15"
+      value="3"
       id="Speed1">
       <p>
 Delay time  <input id="time2" type="range" min="10" max="2000" step="10" value="350">
@@ -113,8 +113,8 @@ let modRateAmount = 1;
 
 delay.connect(feedback);
 feedback.connect(delay);    
-
 delay.connect(hpfilter);
+
 hpfilter.connect(master);
 master.connect(ctx.destination);
 
@@ -156,7 +156,8 @@ document.getElementById('button1').addEventListener('click', function () {
   filterLFO.connect(LFOdepth);
   LFOdepth.connect(hpfilter.frequency);
 
-  const adsr = new GainNode(ctx, { gain: 0 });
+  const adsr = new GainNode(ctx);
+  adsr.gain.value = 0;
 
   adsr.gain.setValueAtTime(0, t);
   adsr.gain.linearRampToValueAtTime(0.2, t + 0.01);
@@ -196,10 +197,13 @@ delay2.delayTime.value = 0.35
 
 const feedback2 = new GainNode(ctx, { gain: 0.5 });
 
-delay2.connect(feedback2);
-feedback2.connect(delay2);    
+const hpfilter2 = new BiquadFilterNode(ctx, { type: 'highpass', frequency: 1000 });
 
-delay2.connect(master2)
+delay2.connect(feedback2);
+feedback2.connect(delay2);
+delay2.connect(hpfilter2);    
+
+hpfilter2.connect(master2)
 master2.connect(ctx.destination);
 
 const midiPitches2 = [52, 54, 56, 57, 59, 61, 62, 64]; // e mixolydian scale
@@ -230,7 +234,7 @@ document.getElementById('button2').addEventListener('click', function () {
           //Set up Frequency Modulation Tone
           osc1 = new OscillatorNode(ctx);
           osc1.frequency.value = randomPitch2();
-          osc1.type = "sine";
+          osc1.type = "sawtooth";
 
           const osc1Gain = new GainNode(ctx);
           osc1Gain.gain.value = 0.1;
@@ -246,19 +250,20 @@ document.getElementById('button2').addEventListener('click', function () {
 
           const filter1 = new BiquadFilterNode(ctx);
           filter1.type = "lowpass";
-          filter1.frequency.value = filterFreq2();
-          filter1.Q.value = 5;
+          filter1.frequency.value = 200;
+          filter1.Q.value = 8;
 
           filterMod1 = new OscillatorNode(ctx);
           filterMod1.frequency.value = document.getElementById('Speed1').value;
-          filterMod1.type = "square";
+          filterMod1.type = "sine";
 
           const filterModGain1 = new GainNode(ctx);
-          filterModGain1.gain.value = 1000;
+          filterModGain1.gain.value = 100;
 
           //connect everything up
 
-          const adsr2 = new GainNode(ctx, { gain: 0 });
+          const adsr2 = new GainNode(ctx);
+          adsr2.gain.value = 0;
 
           adsr2.gain.setValueAtTime(0, t);
           adsr2.gain.linearRampToValueAtTime(0.3, t + 0.2);
