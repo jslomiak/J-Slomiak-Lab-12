@@ -100,7 +100,7 @@ Feedback  <input id="fb2" type="range" min="0" max="95" step="1" value="50">
 const ctx = new AudioContext();
 
 const master = new GainNode(ctx)
-master.gain.value = 0.3;
+master.gain.value = 0.1;
 
 const delay = new DelayNode(ctx)
 delay.delayTime.value = 0.35
