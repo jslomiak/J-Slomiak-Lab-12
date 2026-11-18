@@ -36,11 +36,18 @@ button {
   border: none;
   color:black ;
   padding: 15px 32px;
+  border-radius: 12px;
   font-family: sans-serif;
   font-weight: bold;
   text-align: center;
   font-size: 12px;
   margin: 4px 2px;
+  cursor: pointer;
+  transition: opacity 0.4s ease;
+}
+
+button:hover {
+  opacity: 0.55;
 }
 
 </style> 
@@ -52,7 +59,7 @@ button {
 <button id="button1" type="button">Play note</button>
 
 <p>
-Delay time <input id="time" type="range" min="10" max="2000" step="10" value="350">
+Delay time <input id="time" type="range" min="10" max="2000" step="10" value="350"> 
 <br>
 <br>
 Feedback <input id="fb" type="range" min="0" max="95" step="1" value="50">
